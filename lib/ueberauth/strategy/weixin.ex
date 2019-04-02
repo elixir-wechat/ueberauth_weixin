@@ -9,13 +9,13 @@ defmodule Ueberauth.Strategy.Weixin do
 
   @auth_url "https://open.weixin.qq.com/connect/qrconnect"
   @token_url "https://api.weixin.qq.com/sns/oauth2/access_token"
-  @redirect_uri "http://beaver.ggrok.com/auth/weixin/callback"
 
   def handle_request!(conn) do
     appid = option(conn, :appid)
+    redirect_uri = option(conn, :redirect_uri)
 
     url =
-      "#{@auth_url}?appid=#{appid}&redirect_uri=#{@redirect_uri}&response_type=code&scope=snsapi_login#wechat_redirect"
+      "#{@auth_url}?appid=#{appid}&redirect_uri=#{redirect_uri}&response_type=code&scope=snsapi_login#wechat_redirect"
 
     redirect!(conn, url)
   end

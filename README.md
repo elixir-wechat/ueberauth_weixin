@@ -20,6 +20,7 @@ config :uberauth, Ueberauth,
     weixin: {Ueberauth.Strategy.Weixin,
              [appid: "YOUR_APPID",
               secret: "YOUR_SECRET",
+              redirect_uri: "REDIRECT_URI",
               uid_field: :unionid # default is :openid
              ]}
   ]
