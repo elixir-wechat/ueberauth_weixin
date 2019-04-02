@@ -27,8 +27,8 @@ defmodule UeberauthWeixin.MixProject do
   defp deps do
     [
       {:ueberauth, "~> 0.6"},
-      {:httpoison, "~> 1.0"},
       {:jason, "~> 1.0"},
+      {:oauth2, "~> 1.0"},
       {:ex_doc, "~> 0.19", only: :dev, runtime: false}
     ]
   end

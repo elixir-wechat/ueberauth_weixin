@@ -18,12 +18,13 @@ end
 config :ueberauth, Ueberauth,
   providers: [
     weixin: {Ueberauth.Strategy.Weixin,
-             [appid: "YOUR_APPID",
-              secret: "YOUR_SECRET",
-              redirect_uri: "https://example.com/auth/weixin/callback",
-              uid_field: :unionid # default is :openid
-             ]}
+             [uid_field: :unionid # default is :openid]}
   ]
+  
+config :ueberauth, Ueberauth.Strategy.Weixin.OAuth,
+  client_id: "YOUR_APPID",
+  client_secret: "YOUR_SECRET",
+  redirect_uri: "https://example.com/auth/weixin/callback"
 ```
 
 ## Ueberauth.Auth struct
