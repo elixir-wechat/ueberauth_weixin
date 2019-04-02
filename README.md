@@ -15,7 +15,7 @@ end
 ## Usage
 
 ```elixir
-config :uberauth, Ueberauth,
+config :ueberauth, Ueberauth,
   providers: [
     weixin: {Ueberauth.Strategy.Weixin,
              [appid: "YOUR_APPID",
