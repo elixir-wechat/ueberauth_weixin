@@ -1,6 +1,6 @@
-# Überauth Weixin
+# Ueberauth Weixin
 
-> Weixin (open.weixin.qq.com) strategy for Überauth.
+> Weixin (open.weixin.qq.com) strategy for Ueberauth.
 
 ## Installation
 
