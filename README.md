@@ -4,11 +4,11 @@
 
 ## Installation
 
+Before https://github.com/scrogson/oauth2/pull/132 is merged, use this repo directly.
+
 ```elixir
 def deps do
-  [
-    {:ueberauth_weixin, "~> 0.1.0"}
-  ]
+  {:ueberauth_weixin, github: "elixir-wechat/ueberauth_weixin", branch: "master"}
 end
 ```
 
@@ -69,6 +69,6 @@ config :ueberauth, Ueberauth.Strategy.Weixin.OAuth,
   },
   provider: :weixin,
   strategy: Ueberauth.Strategy.Weixin,
-  uid: "o2oUsuOUzgNL-JSLtIp8b3FzkI-M" # it depends on the :uid_field option, default value is from :openid.
+  uid: "o2oUsuOUzgNL-JSLtIp8b3FzkI-M" # it depends on the :uid_field option, default value is :openid.
 }
 ```
