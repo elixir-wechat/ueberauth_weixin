@@ -3,14 +3,6 @@ defmodule Ueberauth.Strategy.Weixin.OAuth do
 
   use OAuth2.Strategy
 
-  def new do
-    :ueberauth
-    |> Application.fetch_env!(__MODULE__)
-    |> Keyword.merge(config())
-    |> OAuth2.Client.new()
-    |> put_serializer("text/plain", Jason)
-  end
-
   defp config do
     [
       strategy: __MODULE__,
@@ -20,14 +12,19 @@ defmodule Ueberauth.Strategy.Weixin.OAuth do
     ]
   end
 
+  def client do
+    Application.fetch_env!(:ueberauth, __MODULE__)
+    |> Keyword.merge(config())
+    |> OAuth2.Client.new()
+    |> put_serializer("text/plain", Jason)
+  end
+
   def authorize_url!(params \\ []) do
-    new()
-    |> OAuth2.Client.authorize_url!(params)
+    OAuth2.Client.authorize_url!(client(), params)
   end
 
   def get_token!(params \\ [], headers \\ []) do
-    new()
-    |> OAuth2.Client.get_token!(params, headers)
+    OAuth2.Client.get_token!(client(), params, headers)
   end
 
   def fetch_user(%{token: token} = client) do
