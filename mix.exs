@@ -28,7 +28,7 @@ defmodule UeberauthWeixin.MixProject do
     [
       {:ueberauth, "~> 0.6"},
       {:jason, "~> 1.0"},
-      {:oauth2, "~> 1.0"},
+      {:oauth2, github: "elixir-wechat/oauth2", branch: "fix-serializer-not-used"},
       {:ex_doc, "~> 0.19", only: :dev, runtime: false}
     ]
   end
