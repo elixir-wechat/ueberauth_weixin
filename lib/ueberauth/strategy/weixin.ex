@@ -56,7 +56,19 @@ defmodule Ueberauth.Strategy.Weixin do
   end
 
   def credentials(conn) do
-    %Credentials{token: conn.private.weixin_token}
+    token = conn.private.weixin_token
+    other_params = token.other_params
+    {scope, other_params} = Map.pop(other_params, "scope")
+
+    %Credentials{
+      token: token.access_token,
+      refresh_token: token.refresh_token,
+      token_type: token.token_type,
+      expires: token.expires_at != nil,
+      expires_at: token.expires_at,
+      scopes: [scope],
+      other: other_params
+    }
   end
 
   def extra(conn) do

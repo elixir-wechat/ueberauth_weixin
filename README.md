@@ -29,17 +29,22 @@ config :ueberauth, Ueberauth.Strategy.Weixin.OAuth,
 
 ## Ueberauth.Auth struct
 
+Notice: uid depends on the `:uid_field` option.
+
 ```elixir
 %Ueberauth.Auth{
   credentials: %Ueberauth.Auth.Credentials{
-    expires: nil,
-    expires_at: nil,
-    other: %{},
-    refresh_token: nil,
-    scopes: [],
+    expires: true,
+    expires_at: 1554813400,
+    other: %{
+      "openid" => "oRvxY6DXNEdehn5sPypKvep9zyds",
+      "unionid" => "o2oUsuOUzgNL-JSLtIp8b3FzkI-M"
+    },
+    refresh_token: "20_MT0uS2Zml9dqA03WsSdtsgUFTYGvWp7YSNrKmvzdVAyqrZv2_6uAvpHjauWAvY4GEbu-LAs7_QbSJ94d9y_BRw",
+    scopes: ["snsapi_login"],
     secret: nil,
-    token: "20_6S-d2pltLK8zzQfNvyzpu--yFH7sHdoKDgZRbvLbhlkTaRYhdg2z2bkh1aj1n7_TqEbsLE8DrU6D4yBtFHSuZQ",
-    token_type: nil
+    token: "20_3wMtd0cEIkNm1spcQpdixg_14VbXOdEKoGVtkmUBSQDvqkWDEi6WozUVcw7fch92gAwK_Eyh0aO8_uUWts-9hg",
+    token_type: "Bearer"
   },
   extra: %Ueberauth.Auth.Extra{
     raw_info: %{
@@ -69,6 +74,6 @@ config :ueberauth, Ueberauth.Strategy.Weixin.OAuth,
   },
   provider: :weixin,
   strategy: Ueberauth.Strategy.Weixin,
-  uid: "o2oUsuOUzgNL-JSLtIp8b3FzkI-M" # it depends on the :uid_field option, default value is :openid.
+  uid: "o2oUsuOUzgNL-JSLtIp8b3FzkI-M"
 }
 ```
