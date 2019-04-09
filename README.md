@@ -1,6 +1,6 @@
 # Ueberauth Weixin
 
-> Weixin (open.weixin.qq.com) strategy for Ueberauth.
+Weixin (open.weixin.qq.com) strategy for Ueberauth.
 
 ## Installation
 
@@ -29,7 +29,7 @@ config :ueberauth, Ueberauth.Strategy.Weixin.OAuth,
 
 ## Ueberauth.Auth struct
 
-Notice: uid depends on the `:uid_field` option.
+Notice: `uid` depends on the `uid_field` option.
 
 ```elixir
 %Ueberauth.Auth{
