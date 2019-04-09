@@ -1,6 +1,6 @@
 # Ueberauth Weixin
 
-Weixin (open.weixin.qq.com) strategy for Ueberauth.
+Wechat open platform OAuth2 strategy for Ueberauth.
 
 ## Installation
 
