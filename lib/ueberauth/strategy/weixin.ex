@@ -9,16 +9,35 @@ defmodule Ueberauth.Strategy.Weixin do
   alias Ueberauth.Strategy.Weixin.OAuth
 
   def handle_request!(conn) do
-    url = OAuth.authorize_url!(conn.params)
-    redirect!(conn, url)
+    params =
+      Map.put_new_lazy(conn.params, "state", fn ->
+        Base.url_encode64(:crypto.strong_rand_bytes(32), padding: false)
+      end)
+
+    url = OAuth.authorize_url!(params)
+
+    conn
+    |> put_session(:weixin_state, params["state"])
+    |> redirect!(url)
   end
 
-  def handle_callback!(%Plug.Conn{params: %{"code" => code}} = conn) do
+  def handle_callback!(%Plug.Conn{params: %{"code" => code, "state" => given_state}} = conn) do
+    state = get_session(conn, :weixin_state)
+
+    if state == given_state do
+      fetch_user(conn, code)
+    else
+      set_errors!(conn, [error("invalid_state", "Parameter state is invalid")])
+    end
+  end
+
+  defp fetch_user(conn, code) do
     client = OAuth.get_token!(code: code)
 
     case OAuth.fetch_user(client) do
       {:ok, user} ->
         conn
+        |> delete_session(:weixin_state)
         |> put_private(:weixin_user, user)
         |> put_private(:weixin_token, client.token)
 
