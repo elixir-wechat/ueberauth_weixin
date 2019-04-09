@@ -9,7 +9,7 @@ defmodule Ueberauth.Strategy.Weixin do
   alias Ueberauth.Strategy.Weixin.OAuth
 
   def handle_request!(conn) do
-    url = OAuth.authorize_url!()
+    url = OAuth.authorize_url!(conn.params)
     redirect!(conn, url)
   end
 
