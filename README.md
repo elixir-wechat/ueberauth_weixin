@@ -23,8 +23,7 @@ config :ueberauth, Ueberauth,
   
 config :ueberauth, Ueberauth.Strategy.Weixin.OAuth,
   client_id: "YOUR_APPID",
-  client_secret: "YOUR_SECRET",
-  redirect_uri: "https://example.com/auth/weixin/callback"
+  client_secret: "YOUR_SECRET"
 ```
 
 ## Ueberauth.Auth struct

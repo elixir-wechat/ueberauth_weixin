@@ -10,15 +10,13 @@ defmodule Ueberauth.Strategy.Weixin do
 
   def handle_request!(conn) do
     params =
-      Map.put_new_lazy(conn.params, "state", fn ->
-        Base.url_encode64(:crypto.strong_rand_bytes(32), padding: false)
-      end)
-
-    url = OAuth.authorize_url!(params)
+      conn.params
+      |> Map.put_new_lazy("state", &random_state/0)
+      |> Map.put_new("redirect_url", callback_url(conn))
 
     conn
     |> put_session(:weixin_state, params["state"])
-    |> redirect!(url)
+    |> redirect!(OAuth.authorize_url!(params))
   end
 
   def handle_callback!(%Plug.Conn{params: %{"code" => code, "state" => given_state}} = conn) do
@@ -91,5 +89,9 @@ defmodule Ueberauth.Strategy.Weixin do
     conn
     |> options()
     |> Keyword.get(key, default)
+  end
+
+  defp random_state do
+    Base.url_encode64(:crypto.strong_rand_bytes(32), padding: false)
   end
 end

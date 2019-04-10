@@ -48,7 +48,6 @@ defmodule Ueberauth.Strategy.Weixin.OAuth do
     |> put_param(:response_type, "code")
     |> put_param(:scope, "snsapi_login")
     |> put_param(:appid, client.client_id)
-    |> put_param(:redirect_uri, client.redirect_uri)
     |> merge_params(params)
   end
 
