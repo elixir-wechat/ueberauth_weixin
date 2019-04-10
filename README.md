@@ -27,7 +27,7 @@ config :ueberauth, Ueberauth.Strategy.Weixin.OAuth,
 
 `uid` value in `%Ueberauth.Auth{}`depends on the `uid_field` option.
 
-`uid_field` has two values: `:openid` and `:unionid`, openid is the default value.
+`uid_field` has two values: `:openid` and `:unionid`. Default: `:openid`.
 
 ## Ueberauth.Auth struct
 
