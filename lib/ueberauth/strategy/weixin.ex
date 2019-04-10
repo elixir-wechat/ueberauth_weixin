@@ -24,7 +24,7 @@ defmodule Ueberauth.Strategy.Weixin do
   def handle_callback!(%Plug.Conn{params: %{"code" => code, "state" => given_state}} = conn) do
     state = get_session(conn, :weixin_state)
 
-    if (state == given_state) && (!state && given_state == "") do
+    if (state == given_state) || (!state && given_state == "") do
       fetch_user(conn, code)
     else
       set_errors!(conn, [error("invalid_state", "Parameter state is invalid")])
