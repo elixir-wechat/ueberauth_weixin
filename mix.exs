@@ -10,7 +10,7 @@ defmodule UeberauthWeixin.MixProject do
       deps: deps(),
 
       # Publish package
-      name: "Ueberauth Weixin Strategy",
+      name: "Ueberauth Weixin",
       description: description(),
       package: package()
     ]
@@ -34,7 +34,7 @@ defmodule UeberauthWeixin.MixProject do
   end
 
   defp description do
-    "An Ueberauth strategy for open.weixin.qq.com authentication."
+    "An Ueberauth strategy for using Wechat open platform OAuth2 authentication (https://open.weixin.qq.com)."
   end
 
   defp package do

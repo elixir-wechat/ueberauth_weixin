@@ -1,6 +1,6 @@
-# Ueberauth Weixin
+# Überauth Weixin
 
-Wechat open platform OAuth2 strategy for Ueberauth.
+Wechat open platform OAuth2 strategy for Überauth.
 
 ## Installation
 
