@@ -17,8 +17,7 @@ end
 ```elixir
 config :ueberauth, Ueberauth,
   providers: [
-    weixin: {Ueberauth.Strategy.Weixin,
-             [uid_field: :unionid # default is :openid]}
+    weixin: {Ueberauth.Strategy.Weixin, [uid_field: :unionid]}
   ]
   
 config :ueberauth, Ueberauth.Strategy.Weixin.OAuth,
@@ -26,9 +25,11 @@ config :ueberauth, Ueberauth.Strategy.Weixin.OAuth,
   client_secret: "YOUR_SECRET"
 ```
 
-## Ueberauth.Auth struct
+`uid` value in `%Ueberauth.Auth{}`depends on the `uid_field` option.
 
-Notice: `uid` depends on the `uid_field` option.
+`uid_field` has two values: `:openid` and `:unionid`, openid is the default value.
+
+## Ueberauth.Auth struct
 
 ```elixir
 %Ueberauth.Auth{
