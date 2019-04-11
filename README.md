@@ -29,6 +29,33 @@ config :ueberauth, Ueberauth.Strategy.Weixin.OAuth,
 
 `uid_field` has two values: `:openid` and `:unionid`. Default: `:openid`.
 
+## Config router.ex in Phoenix project
+
+```elixir
+scope "/auth", MyAppWeb do
+  pipe_through :browser
+
+  get "/:provider", AuthController, :request
+  get "/:provider/callback", AuthController, :callback
+end
+```
+
+## Workflow
+
+1. Visit `/auth/weixin` to start the OAuth2 workflow
+
+2. If authorization succeeds, it will redirect user back to `/auth/weixin/callback` with the `%Ueberauth.Auth{}` struct
+
+```elixir
+def callback(%Plug.Conn{assigns: %{ueberauth_auth: auth}} = conn, _params) do
+  %Ueberauth.Auth{provider: provider, uid: uid} = auth
+
+  # other logic
+end
+```
+3. If authorization fails, in my experiment, in my experiment, it will not redirect the user back.
+
+
 ## Ueberauth.Auth struct
 
 ```elixir
