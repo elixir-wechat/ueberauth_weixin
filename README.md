@@ -4,11 +4,9 @@ Wechat open platform OAuth2 strategy for Überauth.
 
 ## Installation
 
-Before https://github.com/scrogson/oauth2/pull/132 is merged, use this repo directly.
-
 ```elixir
 def deps do
-  {:ueberauth_weixin, github: "elixir-wechat/ueberauth_weixin", branch: "master"}
+  {:ueberauth_weixin, "~> 1.0"}
 end
 ```
 
