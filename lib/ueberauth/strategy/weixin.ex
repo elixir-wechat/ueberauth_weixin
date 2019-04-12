@@ -12,7 +12,7 @@ defmodule Ueberauth.Strategy.Weixin do
     params =
       conn.params
       |> Map.put_new_lazy("state", &random_state/0)
-      |> Map.put_new("redirect_url", callback_url(conn))
+      |> Map.put_new("redirect_uri", callback_url(conn))
 
     conn
     |> put_session(:weixin_state, params["state"])
