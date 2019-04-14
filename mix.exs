@@ -12,7 +12,8 @@ defmodule UeberauthWeixin.MixProject do
       # Publish package
       name: "Ueberauth Weixin",
       description: description(),
-      package: package()
+      package: package(),
+      docs: docs()
     ]
   end
 
@@ -44,6 +45,13 @@ defmodule UeberauthWeixin.MixProject do
       exclude_patterns: [".DS_Store"],
       maintainers: ["goofansu"],
       links: %{"Github" => "https://github.com/elixir-wechat/ueberauth_weixin"}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "readme",
+      extras: ["README.md"]
     ]
   end
 end
