@@ -4,7 +4,7 @@ defmodule UeberauthWeixin.MixProject do
   def project do
     [
       app: :ueberauth_weixin,
-      version: "1.0.0",
+      version: "1.0.1",
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
