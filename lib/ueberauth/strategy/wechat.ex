@@ -1,0 +1,97 @@
+defmodule Ueberauth.Strategy.Wechat do
+  @moduledoc """
+  OAuth2 login for https://mp.weixin.qq.com.
+  """
+
+  use Ueberauth.Strategy, uid_field: :openid
+
+  alias Ueberauth.Auth.{Credentials, Extra, Info}
+  alias Ueberauth.Strategy.Wechat.OAuth
+
+  def handle_request!(conn) do
+    params =
+      conn.params
+      |> Map.put_new_lazy("state", &random_state/0)
+      |> Map.put_new("redirect_uri", callback_url(conn))
+
+    conn
+    |> put_session(:wechat_state, params["state"])
+    |> redirect!(OAuth.authorize_url!(params))
+  end
+
+  def handle_callback!(%Plug.Conn{params: %{"code" => code, "state" => given_state}} = conn) do
+    state = get_session(conn, :wechat_state)
+
+    if state == given_state || (!state && given_state == "") do
+      fetch_user(conn, code)
+    else
+      set_errors!(conn, [error("invalid_state", "Parameter state is invalid")])
+    end
+  end
+
+  defp fetch_user(conn, code) do
+    client = OAuth.get_token!(code: code)
+
+    case OAuth.fetch_user(client) do
+      {:ok, user} ->
+        conn
+        |> delete_session(:wechat_state)
+        |> put_private(:wechat_user, user)
+        |> put_private(:wechat_token, client.token)
+
+      {:error, error} ->
+        set_errors!(conn, [error(error.code, error.reason)])
+    end
+  end
+
+  def uid(conn) do
+    uid_field =
+      conn
+      |> option(:uid_field)
+      |> to_string
+
+    conn.private.wechat_user[uid_field]
+  end
+
+  def credentials(conn) do
+    token = conn.private.wechat_token
+    other_params = token.other_params
+    {scope, other_params} = Map.pop(other_params, "scope")
+
+    %Credentials{
+      token: token.access_token,
+      refresh_token: token.refresh_token,
+      token_type: token.token_type,
+      expires: token.expires_at != nil,
+      expires_at: token.expires_at,
+      scopes: [scope],
+      other: other_params
+    }
+  end
+
+  def extra(conn) do
+    %Extra{raw_info: conn.private.wechat_user}
+  end
+
+  def info(conn) do
+    user = conn.private.wechat_user
+
+    %Info{
+      name: user["nickname"],
+      nickname: user["nickname"],
+      image: user["headimgurl"]
+    }
+  end
+
+  defp option(conn, key) do
+    default = Keyword.get(default_options(), key)
+
+    conn
+    |> options()
+    |> Keyword.get(key, default)
+  end
+
+  defp random_state do
+    Base.url_encode64(:crypto.strong_rand_bytes(32), padding: false)
+  end
+end
