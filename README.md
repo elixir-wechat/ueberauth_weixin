@@ -1,6 +1,11 @@
 # Überauth Weixin
 
-Wechat open platform OAuth2 strategy for Überauth.
+Wechat OAuth2 strategy for Überauth.
+
+Includes: 
+
+* Wechat open platform OAuth2 login (https://open.weixin.qq.com)
+* Wechat in-app OAuth2 login (https://mp.weixin.qq.com)
 
 ## Installation
 
@@ -12,22 +17,7 @@ end
 
 ## Usage
 
-```elixir
-config :ueberauth, Ueberauth,
-  providers: [
-    weixin: {Ueberauth.Strategy.Weixin, [uid_field: :unionid]}
-  ]
-  
-config :ueberauth, Ueberauth.Strategy.Weixin.OAuth,
-  client_id: "YOUR_APPID",
-  client_secret: "YOUR_SECRET"
-```
-
-`uid` value in `%Ueberauth.Auth{}`depends on the `uid_field` option.
-
-`uid_field` has two values: `:openid` and `:unionid`. Default: `:openid`.
-
-## Config router.ex in Phoenix project
+### Config router.ex in Phoenix project
 
 ```elixir
 scope "/auth", MyAppWeb do
@@ -38,11 +28,42 @@ scope "/auth", MyAppWeb do
 end
 ```
 
+### Config strategies
+
+* Wechat open platform OAuth2 login
+
+  ```elixir
+  config :ueberauth, Ueberauth,
+    providers: [
+      weixin: {Ueberauth.Strategy.Weixin, [uid_field: :unionid]}
+    ]
+
+  config :ueberauth, Ueberauth.Strategy.Weixin.OAuth,
+    client_id: "YOUR_APPID",
+    client_secret: "YOUR_SECRET"
+  ```
+
+* Wechat in-app OAuth2 login
+
+  ```elixir
+  config :ueberauth, Ueberauth,
+    providers: [
+      weixin: {Ueberauth.Strategy.Wechat, [uid_field: :unionid]}
+    ]
+
+  config :ueberauth, Ueberauth.Strategy.Wechat.OAuth,
+    client_id: "YOUR_APPID",
+    client_secret: "YOUR_SECRET"
+  ```
+
+> Option `uid_field` has two values: `:openid` and `:unionid`. Default: `:openid`. 
+  `uid` in `%Ueberauth.Auth{}`depends on this option.
+
 ## Workflow
 
-1. Visit `/auth/weixin` to start the OAuth2 workflow
+1. Visit `/auth/:provider` to start the OAuth2 workflow
 
-2. If authorization succeeds, it will redirect user back to `/auth/weixin/callback` with the `%Ueberauth.Auth{}` struct
+2. If authorization succeeds, it will redirect user back to `/auth/:provider/callback` with the `%Ueberauth.Auth{}` struct
 
 ```elixir
 def callback(%Plug.Conn{assigns: %{ueberauth_auth: auth}} = conn, _params) do
@@ -53,8 +74,7 @@ end
 ```
 3. If authorization fails, in my experiment, in my experiment, it will not redirect the user back.
 
-
-## Ueberauth.Auth struct
+## Ueberauth.Auth struct for Wechat open platform
 
 ```elixir
 %Ueberauth.Auth{
@@ -100,5 +120,50 @@ end
   provider: :weixin,
   strategy: Ueberauth.Strategy.Weixin,
   uid: "o2oUsuOUzgNL-JSLtIp8b3FzkI-M"
+}
+```
+
+## Ueberauth.Auth struct for Wechat in-app platform
+
+```elixir
+%Ueberauth.Auth{
+  credentials: %Ueberauth.Auth.Credentials{
+    expires: true,
+    expires_at: 1555289733,
+    other: %{"openid" => "oi00OuKAhA8bm5okpaIDs7WmUZr4"},
+    refresh_token: "20_7mjDBge3fRkdYkhkfBa2P-1HuhaZV3rg7BXFPNX4XUgG3fyuPTgI9GtcYbn8-vPp5mwKuvVDXbULlLKuhbWEgERjKG8E-3vkr1OflkEafKs",
+    scopes: ["snsapi_userinfo"],
+    secret: nil,
+    token: "20_r3UTxXsaApzjSVW7w611ObJBfAUj0_8TjH1PHpT0gVxC3L1C5qkYPZv4ke9aMrsexIu7qwibcdqSMMjg-Krz6gbT7l7a64YVlot4TdcrZpA",
+    token_type: "Bearer"
+  },
+  extra: %Ueberauth.Auth.Extra{
+    raw_info: %{
+      "city" => "Baoshan",
+      "country" => "CN",
+      "headimgurl" => "http://thirdwx.qlogo.cn/mmopen/vi_32/PiajxSqBRaELbibcX7pqYNlNy97Ipgu4B7E3FzxIcEnOKnPM1AOBEicqZq0l4xqque9iboicc9lbDictrGCCxzW3fgUg/132",
+      "language" => "zh_CN",
+      "nickname" => "yejun.su",
+      "openid" => "oi00OuKAhA8bm5okpaIDs7WmUZr4",
+      "privilege" => [],
+      "province" => "Shanghai",
+      "sex" => 1
+    }
+  },
+  info: %Ueberauth.Auth.Info{
+    description: nil,
+    email: nil,
+    first_name: nil,
+    image: "http://thirdwx.qlogo.cn/mmopen/vi_32/PiajxSqBRaELbibcX7pqYNlNy97Ipgu4B7E3FzxIcEnOKnPM1AOBEicqZq0l4xqque9iboicc9lbDictrGCCxzW3fgUg/132",
+    last_name: nil,
+    location: nil,
+    name: "yejun.su",
+    nickname: "yejun.su",
+    phone: nil,
+    urls: %{}
+  },
+  provider: :wechat,
+  strategy: Ueberauth.Strategy.Wechat,
+  uid: "oi00OuKAhA8bm5okpaIDs7WmUZr4"
 }
 ```
