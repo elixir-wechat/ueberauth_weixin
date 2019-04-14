@@ -20,7 +20,7 @@ defmodule Ueberauth.Strategy.Weixin.OAuth do
   end
 
   def authorize_url!(params \\ []) do
-    OAuth2.Client.authorize_url!(client(), params)
+    OAuth2.Client.authorize_url!(client(), params) <> "#wechat_redirect"
   end
 
   def get_token!(params \\ [], headers \\ []) do
