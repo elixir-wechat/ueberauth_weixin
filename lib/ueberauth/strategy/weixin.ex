@@ -10,35 +10,23 @@ defmodule Ueberauth.Strategy.Weixin do
   import UeberauthWeixin.OAuth2.Provider.Weixin,
     only: [authorize_url!: 1, get_token!: 1, fetch_user: 1]
 
+  @impl true
   def handle_request!(conn) do
     params =
       conn.params
-      |> Map.put_new_lazy("state", &random_state/0)
       |> Map.put_new("redirect_uri", callback_url(conn))
       |> Map.put_new("scope", "snsapi_login")
 
-    conn
-    |> put_session(:weixin_state, params["state"])
-    |> redirect!(authorize_url!(params))
+    redirect!(conn, authorize_url!(params))
   end
 
-  def handle_callback!(%Plug.Conn{params: %{"code" => code, "state" => given_state}} = conn) do
-    state = get_session(conn, :weixin_state)
-
-    if state == given_state || (!state && given_state == "") do
-      fetch_user(conn, code)
-    else
-      set_errors!(conn, [error("invalid_state", "Parameter state is invalid")])
-    end
-  end
-
-  defp fetch_user(conn, code) do
+  @impl true
+  def handle_callback!(%Plug.Conn{params: %{"code" => code}} = conn) do
     client = get_token!(code: code)
 
     case fetch_user(client) do
       {:ok, user} ->
         conn
-        |> delete_session(:weixin_state)
         |> put_private(:weixin_user, user)
         |> put_private(:weixin_token, client.token)
 
@@ -47,6 +35,14 @@ defmodule Ueberauth.Strategy.Weixin do
     end
   end
 
+  @impl true
+  def handle_cleanup!(conn) do
+    conn
+    |> put_private(:weixin_user, nil)
+    |> put_private(:weixin_token, nil)
+  end
+
+  @impl true
   def uid(conn) do
     uid_field =
       conn
@@ -56,6 +52,7 @@ defmodule Ueberauth.Strategy.Weixin do
     conn.private.weixin_user[uid_field]
   end
 
+  @impl true
   def credentials(conn) do
     token = conn.private.weixin_token
     other_params = token.other_params
@@ -72,10 +69,12 @@ defmodule Ueberauth.Strategy.Weixin do
     }
   end
 
+  @impl true
   def extra(conn) do
     %Extra{raw_info: conn.private.weixin_user}
   end
 
+  @impl true
   def info(conn) do
     user = conn.private.weixin_user
 
@@ -92,9 +91,5 @@ defmodule Ueberauth.Strategy.Weixin do
     conn
     |> options()
     |> Keyword.get(key, default)
-  end
-
-  defp random_state do
-    Base.url_encode64(:crypto.strong_rand_bytes(32), padding: false)
   end
 end

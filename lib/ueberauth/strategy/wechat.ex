@@ -10,35 +10,23 @@ defmodule Ueberauth.Strategy.Wechat do
   import UeberauthWeixin.OAuth2.Provider.Wechat,
     only: [authorize_url!: 1, get_token!: 1, fetch_user: 1]
 
+  @impl true
   def handle_request!(conn) do
     params =
       conn.params
-      |> Map.put_new_lazy("state", &random_state/0)
       |> Map.put_new("redirect_uri", callback_url(conn))
       |> Map.put_new("scope", "snsapi_userinfo")
 
-    conn
-    |> put_session(:wechat_state, params["state"])
-    |> redirect!(authorize_url!(params))
+    redirect!(conn, authorize_url!(params))
   end
 
-  def handle_callback!(%Plug.Conn{params: %{"code" => code, "state" => given_state}} = conn) do
-    state = get_session(conn, :wechat_state)
-
-    if state == given_state || (!state && given_state == "") do
-      fetch_user(conn, code)
-    else
-      set_errors!(conn, [error("invalid_state", "Parameter state is invalid")])
-    end
-  end
-
-  defp fetch_user(conn, code) do
+  @impl true
+  def handle_callback!(%Plug.Conn{params: %{"code" => code}} = conn) do
     client = get_token!(code: code)
 
     case fetch_user(client) do
       {:ok, user} ->
         conn
-        |> delete_session(:wechat_state)
         |> put_private(:wechat_user, user)
         |> put_private(:wechat_token, client.token)
 
@@ -47,6 +35,14 @@ defmodule Ueberauth.Strategy.Wechat do
     end
   end
 
+  @impl true
+  def handle_cleanup!(conn) do
+    conn
+    |> put_private(:wechat_user, nil)
+    |> put_private(:wechat_token, nil)
+  end
+
+  @impl true
   def uid(conn) do
     uid_field =
       conn
@@ -56,6 +52,7 @@ defmodule Ueberauth.Strategy.Wechat do
     conn.private.wechat_user[uid_field]
   end
 
+  @impl true
   def credentials(conn) do
     token = conn.private.wechat_token
     other_params = token.other_params
@@ -72,10 +69,12 @@ defmodule Ueberauth.Strategy.Wechat do
     }
   end
 
+  @impl true
   def extra(conn) do
     %Extra{raw_info: conn.private.wechat_user}
   end
 
+  @impl true
   def info(conn) do
     user = conn.private.wechat_user
 
@@ -92,9 +91,5 @@ defmodule Ueberauth.Strategy.Wechat do
     conn
     |> options()
     |> Keyword.get(key, default)
-  end
-
-  defp random_state do
-    Base.url_encode64(:crypto.strong_rand_bytes(32), padding: false)
   end
 end
