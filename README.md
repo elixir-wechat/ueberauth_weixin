@@ -74,7 +74,7 @@ end
 ```
 3. If authorization fails, in my experiment, in my experiment, it will not redirect the user back.
 
-## Ueberauth.Auth struct for Wechat open platform
+## Ueberauth.Auth struct for :weixin strategy
 
 ```elixir
 %Ueberauth.Auth{
@@ -123,7 +123,7 @@ end
 }
 ```
 
-## Ueberauth.Auth struct for Wechat in-app platform
+## Ueberauth.Auth struct for :wechat strategy
 
 ```elixir
 %Ueberauth.Auth{
