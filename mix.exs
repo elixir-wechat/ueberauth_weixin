@@ -35,7 +35,7 @@ defmodule UeberauthWeixin.MixProject do
   end
 
   defp description do
-    "Wechat open platform OAuth2 strategy for Überauth."
+    "Wechat OAuth2 strategy for Überauth."
   end
 
   defp package do
