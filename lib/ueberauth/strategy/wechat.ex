@@ -6,17 +6,20 @@ defmodule Ueberauth.Strategy.Wechat do
   use Ueberauth.Strategy, uid_field: :openid
 
   alias Ueberauth.Auth.{Credentials, Extra, Info}
-  alias Ueberauth.Strategy.Wechat.OAuth
+
+  import UeberauthWeixin.OAuth2.Provider.Wechat,
+    only: [authorize_url!: 1, get_token!: 1, fetch_user: 1]
 
   def handle_request!(conn) do
     params =
       conn.params
       |> Map.put_new_lazy("state", &random_state/0)
       |> Map.put_new("redirect_uri", callback_url(conn))
+      |> Map.put_new("scope", "snsapi_userinfo")
 
     conn
     |> put_session(:wechat_state, params["state"])
-    |> redirect!(OAuth.authorize_url!(params))
+    |> redirect!(authorize_url!(params))
   end
 
   def handle_callback!(%Plug.Conn{params: %{"code" => code, "state" => given_state}} = conn) do
@@ -30,9 +33,9 @@ defmodule Ueberauth.Strategy.Wechat do
   end
 
   defp fetch_user(conn, code) do
-    client = OAuth.get_token!(code: code)
+    client = get_token!(code: code)
 
-    case OAuth.fetch_user(client) do
+    case fetch_user(client) do
       {:ok, user} ->
         conn
         |> delete_session(:wechat_state)
