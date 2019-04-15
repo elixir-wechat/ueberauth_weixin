@@ -6,8 +6,7 @@ defmodule UeberauthWeixin.OAuth2.Provider.Weixin do
       strategy: UeberauthWeixin.OAuth2.Strategy.AuthCode,
       site: "https://api.weixin.qq.com",
       authorize_url: "https://open.weixin.qq.com/connect/qrconnect",
-      token_url: "https://api.weixin.qq.com/sns/oauth2/access_token",
-      scope: "snsapi_login"
+      token_url: "https://api.weixin.qq.com/sns/oauth2/access_token"
     ]
   end
 
