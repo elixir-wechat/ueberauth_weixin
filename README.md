@@ -48,7 +48,7 @@ end
   ```elixir
   config :ueberauth, Ueberauth,
     providers: [
-      weixin: {Ueberauth.Strategy.Wechat, [uid_field: :unionid]}
+      wechat: {Ueberauth.Strategy.Wechat, [uid_field: :unionid]}
     ]
 
   config :ueberauth, Wechat,
