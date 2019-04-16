@@ -72,7 +72,7 @@ def callback(%Plug.Conn{assigns: %{ueberauth_auth: auth}} = conn, _params) do
   # other logic
 end
 ```
-3. If authorization fails, in my experiment, in my experiment, it will not redirect the user back.
+3. If authorization fails, it will not redirect the user back.
 
 ## Ueberauth.Auth struct for :weixin strategy
 
