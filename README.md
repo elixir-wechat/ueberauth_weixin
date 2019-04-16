@@ -1,11 +1,11 @@
 # Überauth Weixin
 
-Wechat OAuth2 strategy for Überauth.
+Wechat OAuth2 strategies for Überauth.
 
 Includes: 
 
-* Wechat open platform OAuth2 login (https://open.weixin.qq.com)
-* Wechat in-app OAuth2 login (https://mp.weixin.qq.com)
+* `:weixin` - Wechat open platform (https://open.weixin.qq.com)
+* `:wechat` - Wechat official accounts platform (https://mp.weixin.qq.com)
 
 ## Installation
 
@@ -30,7 +30,7 @@ end
 
 ### Config strategies
 
-* Wechat open platform OAuth2 login
+* Wechat open platform
 
   ```elixir
   config :ueberauth, Ueberauth,
@@ -43,7 +43,7 @@ end
     client_secret: "YOUR_SECRET"
   ```
 
-* Wechat in-app OAuth2 login
+* Wechat official accounts platform
 
   ```elixir
   config :ueberauth, Ueberauth,
