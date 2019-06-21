@@ -2,13 +2,13 @@ defmodule Ueberauth.Strategy.Weixin do
   @moduledoc """
   OAuth2 login for https://open.weixin.qq.com.
   """
+  @authorize_url "https://open.weixin.qq.com/connect/qrconnect"
 
   use Ueberauth.Strategy, uid_field: :openid
 
-  alias Ueberauth.Auth.{Credentials, Extra, Info}
+  use Ueberauth.Strategy.Weixin.OAuth, authorize_url: @authorize_url
 
-  import UeberauthWeixin.OAuth2.Provider.Weixin,
-    only: [authorize_url!: 1, get_token!: 1, fetch_user: 1]
+  alias Ueberauth.Auth.{Credentials, Extra, Info}
 
   @impl true
   def handle_request!(conn) do

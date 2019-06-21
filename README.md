@@ -38,7 +38,7 @@ end
       weixin: {Ueberauth.Strategy.Weixin, [uid_field: :unionid]}
     ]
 
-  config :ueberauth, Weixin,
+  config :ueberauth, Ueberauth.Strategy.Weixin,
     client_id: "YOUR_APPID",
     client_secret: "YOUR_SECRET"
   ```
@@ -51,7 +51,7 @@ end
       wechat: {Ueberauth.Strategy.Wechat, [uid_field: :unionid]}
     ]
 
-  config :ueberauth, Wechat,
+  config :ueberauth, Ueberauth.Strategy.Wechat,
     client_id: "YOUR_APPID",
     client_secret: "YOUR_SECRET"
   ```

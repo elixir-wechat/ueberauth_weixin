@@ -1,4 +1,4 @@
-defmodule UeberauthWeixin.OAuth2.Strategy.AuthCode do
+defmodule Ueberauth.Strategy.Weixin.OAuth.AuthCode do
   @moduledoc false
 
   use OAuth2.Strategy

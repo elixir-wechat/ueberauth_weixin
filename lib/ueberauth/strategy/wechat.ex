@@ -3,12 +3,13 @@ defmodule Ueberauth.Strategy.Wechat do
   OAuth2 login for https://mp.weixin.qq.com.
   """
 
+  @authorize_url "https://open.weixin.qq.com/connect/oauth2/authorize"
+
   use Ueberauth.Strategy, uid_field: :openid
 
-  alias Ueberauth.Auth.{Credentials, Extra, Info}
+  use Ueberauth.Strategy.Weixin.OAuth, authorize_url: @authorize_url
 
-  import UeberauthWeixin.OAuth2.Provider.Wechat,
-    only: [authorize_url!: 1, get_token!: 1, fetch_user: 1]
+  alias Ueberauth.Auth.{Credentials, Extra, Info}
 
   @impl true
   def handle_request!(conn) do
