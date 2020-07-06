@@ -29,7 +29,7 @@ defmodule UeberauthWeixin.MixProject do
     [
       {:ueberauth, "~> 0.6"},
       {:jason, "~> 1.0"},
-      {:oauth2, "~> 1.0"},
+      {:oauth2, "~> 2.0"},
       {:ex_doc, "~> 0.20", only: :dev, runtime: false}
     ]
   end
