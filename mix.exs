@@ -42,7 +42,7 @@ defmodule UeberauthWeixin.MixProject do
     [
       name: :ueberauth_weixin,
       licenses: ["MIT"],
-      maintainers: ["goofansu"],
+      maintainers: ["Yejun Su"],
       links: %{"Github" => "https://github.com/elixir-wechat/ueberauth_weixin"}
     ]
   end
